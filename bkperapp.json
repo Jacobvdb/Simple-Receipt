@@ -1,7 +1,7 @@
 {
     "id": "test-app",
     "name": "Test App",
-    "description": "Learning App ",
+    "description": "A test app to learn how to build one.",
     "logoUrl": "https://static.thenounproject.com/png/3469025-200.png",
     "website": "https://bkper.com/apps/test-app",
     "ownerName": "Jacob",
@@ -13,7 +13,7 @@
     "scriptId": "1vzb9gRqQgYpjWFsrr8EVp-fPFKEEE425rV8L_0qOG0ZalP6ULhkAWU3p",
     "menuUrl": "https://script.google.com/a/macros/bkper.com/s/AKfycbzPmGp-wgL6Y7dOS0LpJF-ZHapBX6j5ntAjGpXwQ7Q6BN2ZH4OqS0o42j2_WDfPXmRL/exec?bookId=${book.id}",
     "menuUrlDev": "https://script.google.com/a/macros/bkper.com/s/AKfycbzgp90cQNf_SrqqkuilQ3lSu9NZ6sUcoEqQA7u_r4A/dev?bookId=${book.id}",
-    "menuText": "test app",
+    "menuText": "Test App",
     "menuPopupWidth": 1000,
     "menuPopupHeight": 500,
     "clientId": "321364005933-28d88ahs0ltmpkvvmq57oclaitakmpq8.apps.googleusercontent.com",
