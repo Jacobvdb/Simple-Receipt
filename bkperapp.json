@@ -1,0 +1,24 @@
+{
+    "id": "test-app",
+    "name": "Test App",
+    "description": "Learning App ",
+    "logoUrl": "https://static.thenounproject.com/png/3469025-200.png",
+    "website": "https://bkper.com/apps/exchange-bot",
+    "ownerName": "Jacob",
+    "ownerLogoUrl": "https://avatars.githubusercontent.com/u/2821547?v=4",
+    "ownerWebsite": "https://bkper.com",
+    "repoUrl": "https://github.com/Jacobvdb/test-app",
+    "repoPrivate": false,
+    "deprecated": false,    
+    "scriptId": "1vzb9gRqQgYpjWFsrr8EVp-fPFKEEE425rV8L_0qOG0ZalP6ULhkAWU3p",
+    "menuUrl": "AKfycbyyrcFbtar7ilGVY1LZo3behV1k816FpWPsqt0yit81-Mfx_0LMSDzTh8AGdYKJTdia?bookId=${book.id}",
+    "menuUrlDev": "hhttps://script.google.com/a/macros/bkper.com/s/AKfycbyyrcFbtar7ilGVY1LZo3behV1k816FpWPsqt0yit81-Mfx_0LMSDzTh8AGdYKJTdia/exec?bookId=${book.id}",
+    "menuText": "test app",
+    "menuPopupWidth": 1000,
+    "menuPopupHeight": 500,
+    "clientId": "321364005933-28d88ahs0ltmpkvvmq57oclaitakmpq8.apps.googleusercontent.com",
+    "scopes": ["https://www.googleapis.com/auth/userinfo.email"],
+    "webhookUrl": "https://us-central1-bkper-cc-bot.cloudfunctions.net/prod"
+      }
+    }
+  }
