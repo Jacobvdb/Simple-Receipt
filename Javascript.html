@@ -9,9 +9,9 @@
 
 function initialize(){
     
-      google.script.run.withSuccessHandler(loadStuff)
+        google.script.run.withSuccessHandler(loadStuff)
         .withFailureHandler(showError)
-        .initialize();
+        .initialize(data.bookid);
   
 }
 
@@ -28,7 +28,7 @@ function initialize(){
 function loadStuff(bookName){
  $('#content').empty();
  
- var productos = "<div >"+ bookName + "</div>"
+ var productos = "<div > You are working on the book: "+ bookName + "</div>"
  $('#content').html(productos);
  
 }
