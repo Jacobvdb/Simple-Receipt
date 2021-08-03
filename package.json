@@ -1,0 +1,23 @@
+{
+  "name": "test-app",
+  "version": "1.0.0",
+  "description": "learning how to use npm typescript gas bkper ",
+  "main": "code.gs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "testing",
+    "gas",
+    "bkperapp",
+    "typescript"
+  ],
+  "author": "me",
+  "license": "MIT",
+  "devDependencies": {
+    "@bkper/bkper-api-types": "^4.0.3",
+    "@google/clasp": "^2.4.0",
+    "@types/google-apps-script": "^1.0.37",
+    "bkper": "^2.0.2"
+  }
+}
