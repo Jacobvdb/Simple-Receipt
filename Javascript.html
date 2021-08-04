@@ -7,12 +7,12 @@
   );
   
 
-function initialize(){
+  function initialize(){
     
-        google.script.run.withSuccessHandler(loadStuff)
-        .withFailureHandler(showError)
-        .initialize(data.bookid);
-  
+    google.script.run.withSuccessHandler(loadStuff)
+    .withFailureHandler(showError)
+    .initialize(data.bookid, data.query, data.dselect, data.transactionId);
+
 }
 
 
@@ -25,11 +25,15 @@ function initialize(){
 *
 *
 */
-function loadStuff(bookName){
+function loadStuff(bookName, bookid, query, dselect, transactionId){
  $('#content').empty();
  
- var productos = "<div > You are working on the book: "+ bookName + "</div>"
- $('#content').html(productos);
+ var html = "<div > You are working on the book: "+ bookName + "</div>"
+     html = html +"<div > the bookid : "+ bookid + "</div>"
+     html = html +"<div > The current query: "+ query + "</div>"
+     html = html +"<div > You have a transaction selected: "+ dselect + "</div>"
+     html = html +"<div > This is the id of the selected transaction: "+ transactionId + "</div>"
+ $('#content').html(html);
  
 }
 
