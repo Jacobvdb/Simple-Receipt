@@ -8,12 +8,11 @@
   
 
   function initialize(){
-    
+    showCodeWaiting();
     google.script.run.withSuccessHandler(loadStuff)
     .withFailureHandler(showError)
-    .initialize(data.bookid, data.query, data.dselect, data.transactionId);
-
-}
+    .initialize(data.bookid,   data.transactionIds, data.templateUrl);
+  }
 
 
 /*
@@ -25,14 +24,21 @@
 *
 *
 */
-function loadStuff(bookName, bookid, query, dselect, transactionId){
+function loadStuff(obj){
+  hideCodeWaiting() ;
+  console.log(JSON.stringify(obj))
+  var bookName = obj.bookName;
+  var bookId = obj.bookId;
+  
+  var transactionIds = obj.transactionIds;
+  var templateUrl = obj.templateUrl
  $('#content').empty();
  
  var html = "<div > You are working on the book: "+ bookName + "</div>"
-     html = html +"<div > the bookid : "+ bookid + "</div>"
-     html = html +"<div > The current query: "+ query + "</div>"
-     html = html +"<div > You have a transaction selected: "+ dselect + "</div>"
-     html = html +"<div > This is the id of the selected transaction: "+ transactionId + "</div>"
+     html = html +"<div > the bookid : "+ bookId + "</div>"
+     
+     html = html +"<div > This is the id of the selected transaction: "+ transactionIds + "</div>"
+     html = html +"<div > This : "+ templateUrl + "</div>"
  $('#content').html(html);
  
 }
@@ -52,4 +58,24 @@ function loadStuff(bookName, bookid, query, dselect, transactionId){
     $(element).after(div);
     element.disabled = false;
   }
+
+  function showCodeWaiting() {
+    //code = code.replace(/\s+/g, '-').toLowerCase();
+    //console.log("o code "+code)
+    //showError(null)
+    //waitingCodes.push(code);
+    //disableButtons(true)
+    document.getElementById('waiting').innerHTML = `<img src='https://storage.googleapis.com/bkper-public/addons/loading_3dots.gif'/>`
+  }
+
+  function hideCodeWaiting() {
+    //code = code.replace(/\s+/g, '-').toLowerCase();
+    //waitingCodes.splice(waitingCodes.indexOf(code), 1) 
+    document.getElementById('waiting').innerHTML = ``
+    //if (waitingCodes.length == 0) {
+    //  disableButtons(false)
+    //}
+  }
+
+
 </script>
