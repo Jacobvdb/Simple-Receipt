@@ -1,81 +1,63 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
 <script>
  $(function() 
    {
-       initialize();
+       initialize();     
    }
   );
   
 
   function initialize(){
-    showCodeWaiting();
-    google.script.run.withSuccessHandler(loadStuff)
-    .withFailureHandler(showError)
-    .initialize(data.bookid,   data.transactionIds, data.templateUrl);
+
+    if (data.msg ==""){
+      $('#logo').html("<img class='logo' src='https://static.thenounproject.com/png/2372722-200.png'>");
+      $('#header').html("Generating your receipt");  
+      showCodeWaiting();
+      google.script.run.withSuccessHandler(loadStuff)
+      .withFailureHandler(showError)
+      .initialize(data.bookid,   data.transactionIds, data.msg);
+    } else {
+      $('#logo').html("<img class='logo' src='https://static.thenounproject.com/png/2372722-200.png'>");
+      $('#header').html("<H3>Instructions</h3>");
+      $('#content').empty();
+      var html = "<div ><br><br> </div>"
+      html = html +"<div>" + data.msg + "</div><br><br>"   
+      html = html +"<button id='cancelButton' onclick='closeDialog()'>Close</button>"
+      $('#content').html(html);
+    }
   }
 
-
-/*
-* updateStocks the client side return function for the server side 
-* getStocks function. Updates the stocks values with the values retrieved from the server.  
-*
-* @param {object} stocks   The latest stock values in the format
-*                         product@|@|@quantity
-*
-*
-*/
 function loadStuff(obj){
   hideCodeWaiting() ;
-  console.log(JSON.stringify(obj))
-  var bookName = obj.bookName;
-  var bookId = obj.bookId;
-  
-  var transactionIds = obj.transactionIds;
-  var templateUrl = obj.templateUrl
- $('#content').empty();
- 
- var html = "<div > You are working on the book: "+ bookName + "</div>"
-     html = html +"<div > the bookid : "+ bookId + "</div>"
-     
-     html = html +"<div > This is the id of the selected transaction: "+ transactionIds + "</div>"
-     html = html +"<div > This : "+ templateUrl + "</div>"
- $('#content').html(html);
- 
+  var receiptUrl = obj.receiptUrl;
+  var receiptName = obj.receiptName;
+  $('#logo').html("<img class='logo' src='https://static.thenounproject.com/png/2372722-200.png'>");
+  $('#header').html("<H3>Your receipt is ready</h3>");   
+  $('#content').empty();
+  var html = "<div > </div>"
+      html = html +"<div > <a href='"+receiptUrl+"' target='_blank'>"+ receiptName+"</a> </div><br><br>"   
+      html = html +"<button id='cancelButton' onclick='closeDialog()'>Close</button>"
+  $('#content').html(html);   
 }
 
- /**
-   * Displays an auto-dismissing error message in the add-on's UI.
-   *
-   * @param msg The error message to display.
-   * @param element The element after which to display the error.
-   */
-  function showError(msg, element) {
+  function showError(msg) {
      var div = $('<div id="error">' +msg + '</div>');
-
+     
     setTimeout(function() {
       $('#error').remove();
     }, 7000); // auto-dismiss message after 5s.
-    $(element).after(div);
-    element.disabled = false;
+    $('#content').after(div);
   }
 
   function showCodeWaiting() {
-    //code = code.replace(/\s+/g, '-').toLowerCase();
-    //console.log("o code "+code)
-    //showError(null)
-    //waitingCodes.push(code);
-    //disableButtons(true)
     document.getElementById('waiting').innerHTML = `<img src='https://storage.googleapis.com/bkper-public/addons/loading_3dots.gif'/>`
   }
 
   function hideCodeWaiting() {
-    //code = code.replace(/\s+/g, '-').toLowerCase();
-    //waitingCodes.splice(waitingCodes.indexOf(code), 1) 
     document.getElementById('waiting').innerHTML = ``
-    //if (waitingCodes.length == 0) {
-    //  disableButtons(false)
-    //}
   }
 
+  function closeDialog() { window.top.close(); }
 
 </script>
