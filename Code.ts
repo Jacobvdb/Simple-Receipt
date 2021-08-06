@@ -14,7 +14,7 @@ var __assign = (this && this.__assign) || function () {
 function doGet(e) {
     var bookId = e.parameter.bookId;
     var transactionIds = e.parameter.transactionIds;
-//
+
     if (transactionIds){
     var htmlTemplate = HtmlService.createTemplateFromFile('Dialog');
     htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg:""};
