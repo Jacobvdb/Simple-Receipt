@@ -15,19 +15,30 @@ function doGet(e) {
     var bookId = e.parameter.bookId;
     var transactionIds = e.parameter.transactionIds;
 
-    if (transactionIds){
-    var htmlTemplate = HtmlService.createTemplateFromFile('Dialog');
-    htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg:""};
-    var htmlOutput = htmlTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME)
-        .setTitle('Receipt');
-    } else{
-      // No transactions selected
+    var msg = checkProperties(bookId);
+    
+    
+    if(msg ==""){
+      if (transactionIds){
+        var htmlTemplate = HtmlService.createTemplateFromFile('Dialog');
+        htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg:""};
+        var htmlOutput = htmlTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME)
+            .setTitle('Receipt');
+      }else{
+          // No transactions selected
+          var htmlTemplate = HtmlService.createTemplateFromFile('Dialog');
+          htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg:"Please select some transaction(s) to put on the receipt."};
+          var htmlOutput = htmlTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME)
+              .setTitle('Instructions');  
+      }  
+   }else{
+      // No properties 
       var htmlTemplate = HtmlService.createTemplateFromFile('Dialog');
-      htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg:"Please select some transaction(s) to put on the receipt."};
+      htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg:msg};
       var htmlOutput = htmlTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME)
-          .setTitle('Instructions');  
-    }
-    return htmlOutput;    
+          .setTitle('Instructions');          
+  }   
+  return htmlOutput;
 }
 
 function checkProperties(bookId){
@@ -35,13 +46,24 @@ function checkProperties(bookId){
   var properties = book.getProperties();
   var msg ="";
   // check content
-  if(!properties.receipt_template){ return "Please set book property receipt_template" }
-  if(!properties.receipt_folder_id){return "Please set book property receipt_folder_id"}
+  if(!properties.receipt_template){ Logger.log("no template") return "Please set book property receipt_template" }
+  if(!properties.receipt_folder_id){Logger.log("no id") return "Please set book property receipt_folder_id"}
   
-  // check if content exists
-
-  
-
+  //Check for receipt_folder_id
+  try{
+      DriveApp.getFolderById(properties.receipt_folder_id);
+  }catch (e){
+    msg = "Please check the book property receipt_folder_id <br><br>" + e
+    Logger.log("no no valid id") return msg 
+  }
+   //Check for receipt_folder_id
+   try{
+    DriveApp.getFolderById(properties.receipt_folder_id);
+   }catch (e){
+    msg = "Please check the book property receipt_template <br><br>" + e
+    Logger.log("no valid template url") return msg 
+   }
+  return msg
 }
 
 function testCheckProperties(){
@@ -130,7 +152,7 @@ function merge(model) {
   document.setName(receiptName);
   var file =DriveApp.getFolderById(folderId).createFile(document);
   var receiptUrl = file.getUrl();
-  return {receiptUrl, receiptName, msg}
+  return {receiptUrl, receiptName}
 }
 
 function testMerge(){
