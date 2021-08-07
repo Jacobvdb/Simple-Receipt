@@ -21,6 +21,7 @@ function doGet(e) {
     var htmlOutput = htmlTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME)
         .setTitle('Receipt');
     } else{
+      // No transactions selected
       var htmlTemplate = HtmlService.createTemplateFromFile('Dialog');
       htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg:"Please select some transaction(s) to put on the receipt."};
       var htmlOutput = htmlTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME)
@@ -29,32 +30,37 @@ function doGet(e) {
     return htmlOutput;    
 }
 
+function checkProperties(bookId){
+  var book = BkperApp.openById(bookId);
+  var properties = book.getProperties();
+  var msg ="";
+  // check content
+  if(!properties.receipt_template){ return "Please set book property receipt_template" }
+  if(!properties.receipt_folder_id){return "Please set book property receipt_folder_id"}
+  
+  // check if content exists
+
+  
+
+}
+
+function testCheckProperties(){
+  var bookId = "agtzfmJrcGVyLWhyZHITCxIGTGVkZ2VyGICAoITsoaMJDA";
+  checkProperties(bookId)
+}
+
 
 function initialize(bookId, transactionIds){
   var book = BkperApp.openById(bookId)
  
-
-  const txIds = transactionIds.split(" ");
-  Logger.log("txids:" + txIds)
-
-  for (var i = 0; i < txIds.length - 1; i++) {
-    let txId = txIds[i];
-
-    Logger.log("txid:" + txId);
-    let tx = book.getTransaction(txId)
-    Logger.log("quantity:" + tx.getAmount())
-
-    
-
-  } 
-
   var model = generateModel(book, transactionIds);
   var object = merge(model);
+  
   var receiptUrl = object.receiptUrl;
   var receiptName = object.receiptName;
   
+  
   return { bookId,   transactionIds, receiptUrl, receiptName}
-
 }
 
 
@@ -88,9 +94,6 @@ function generateModel(book, transactionIds) {
   //Receipt
   model.receipt = __assign({ total: total ,date :Utilities.formatDate(new Date(),Session.getScriptTimeZone(), 'dd/MM/yyyy HH:mm:ss')});
 
-
-
- Logger.log(model.receipt.total  + " " + total )
  return model;
 }
 
@@ -105,8 +108,11 @@ function testGenerateModel(){
 
 function merge(model) {
   let folderId = model.book.receipt_folder_id;
+  let template = model.book.receipt_template;
+  
+
   var params = {   
-      'template': model.book.receipt_template,
+      'template': template,
       'model': model,
       'format': 'pdf'
   };
@@ -124,7 +130,7 @@ function merge(model) {
   document.setName(receiptName);
   var file =DriveApp.getFolderById(folderId).createFile(document);
   var receiptUrl = file.getUrl();
-  return {receiptUrl, receiptName}
+  return {receiptUrl, receiptName, msg}
 }
 
 function testMerge(){
