@@ -7,23 +7,23 @@
     "ownerName": "Jacob",
     "ownerLogoUrl": "https://avatars.githubusercontent.com/u/2821547?v=4",
     "ownerWebsite": "https://github.com/Jacobvdb",
-    "repoUrl": "https://github.com/Jacobvdb/test-app",
+    "repoUrl": "https://github.com/Jacobvdb/Simple-Receipt",
     "repoPrivate": false,
     "deprecated": false,    
     "scriptId": "1vzb9gRqQgYpjWFsrr8EVp-fPFKEEE425rV8L_0qOG0ZalP6ULhkAWU3p",
-    "menuUrl": "https://script.google.com/a/macros/bkper.com/s/AKfycbzPmGp-wgL6Y7dOS0LpJF-ZHapBX6j5ntAjGpXwQ7Q6BN2ZH4OqS0o42j2_WDfPXmRL/exec?bookId=${book.id}&transactionIds=${transactions.ids}",
+    "menuUrl": "https://script.google.com/macros/s/AKfycbzv6wEIaZZX_Aiox_ztjtBcoja_38VeX9WnwokeneJCmHPQ6M3dk3877qB4te238BW0/exec?bookId=${book.id}&transactionIds=${transactions.ids}",
     "menuUrlDev": "https://script.google.com/a/macros/bkper.com/s/AKfycbzgp90cQNf_SrqqkuilQ3lSu9NZ6sUcoEqQA7u_r4A/dev?bookId=${book.id}&transactionIds=${transactions.ids}",
     "menuText": "Simple Receipt",
     "menuPopupWidth": 700,
     "menuPopupHeight": 500,
-    "clientId": "321364005933-28d88ahs0ltmpkvvmq57oclaitakmpq8.apps.googleusercontent.com",
-    "scopes": ["https://www.googleapis.com/auth/userinfo.email"],
-    "webhookUrl": "https://us-central1-bkper-cc-bot.cloudfunctions.net/prod",
+    "scopes": ["https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/drive",
+      "https://www.googleapis.com/auth/script.external_request"],
     "propertiesSchema": {
       "book": {
         "keys": [
-          "receipt_template",
-          "receipt_folder_id"  
+          "receipt_template_url",
+          "receipt_folder_url"  
         ],
         "values": [
           "url to your template",

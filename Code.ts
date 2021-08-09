@@ -14,79 +14,101 @@ var __assign = (this && this.__assign) || function () {
 function doGet(e) {
     var bookId = e.parameter.bookId;
     var transactionIds = e.parameter.transactionIds;
-
-    var msg = checkProperties(bookId);
+    var propertiesObj = checkProperties(bookId);
     
+    Logger.log("alo " +propertiesObj.folderId)
     
-    if(msg ==""){
+    if(propertiesObj.msg ==""){
       if (transactionIds){
         var htmlTemplate = HtmlService.createTemplateFromFile('Dialog');
-        htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg:""};
+        htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg:propertiesObj.msg, templateUrl: propertiesObj.templateUrl, folderId: propertiesObj.folderId};
         var htmlOutput = htmlTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME)
             .setTitle('Receipt');
       }else{
           // No transactions selected
           var htmlTemplate = HtmlService.createTemplateFromFile('Dialog');
-          htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg:"Please select some transaction(s) to put on the receipt."};
+          var msg = "Please select some transaction(s) to put on the receipt."
+          htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg:msg};
           var htmlOutput = htmlTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME)
               .setTitle('Instructions');  
       }  
    }else{
       // No properties 
       var htmlTemplate = HtmlService.createTemplateFromFile('Dialog');
-      htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg:msg};
+      htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg:propertiesObj.msg, templateUrl: propertiesObj.templateUrl, folderId: propertiesObj.folderId};
       var htmlOutput = htmlTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME)
           .setTitle('Instructions');          
   }   
   return htmlOutput;
 }
 
+
+
+
 function checkProperties(bookId){
   var book = BkperApp.openById(bookId);
   var properties = book.getProperties();
   var msg ="";
-  // check content
-  if(!properties.receipt_template){ Logger.log("no template") return "Please set book property receipt_template" }
-  if(!properties.receipt_folder_id){Logger.log("no id") return "Please set book property receipt_folder_id"}
   
-  //Check for receipt_folder_id
-  try{
-      DriveApp.getFolderById(properties.receipt_folder_id);
-  }catch (e){
-    msg = "Please check the book property receipt_folder_id <br><br>" + e
-    Logger.log("no no valid id") return msg 
+  //Eeceipt template
+  // Check content
+  if(!properties.receipt_template_url){
+    Logger.log("no tmplate url") 
+    var templateUrl = "https://docs.google.com/document/d/1MMENpgkJu24RqHDtVvn9jEJRcEgBo_KtND123VFNTnk/edit";
+  } else {
+    var templateUrl = properties.receipt_template_url
   }
-   //Check for receipt_folder_id
-   try{
-    DriveApp.getFolderById(properties.receipt_folder_id);
-   }catch (e){
-    msg = "Please check the book property receipt_template <br><br>" + e
-    Logger.log("no valid template url") return msg 
-   }
-  return msg
+  //Check for receipt_template
+  var templateId = getIdFromUrl(templateUrl);
+  try{
+   DriveApp.getFileById(templateId);
+  }catch (e){
+   msg = "Please check the book property receipt_template_url <br><br>" + e
+   Logger.log("no valid template url")
+    //return {msg ,receipt_template_url}
+  }
+
+  //Receipt folder 
+  // Check content
+  if(!properties.receipt_folder_url){
+    Logger.log("no folder url") 
+    msg =  "Please set book property receipt_folder_url"
+    return  {msg, templateUrl}
+  }
+  // check existance/ access
+  var folderId = getIdFromUrl(properties.receipt_folder_url);
+  Logger.log("folder id: " + folderId)
+  try{
+    DriveApp.getFolderById(folderId);
+  }catch (e){
+    msg = "Please check the book property receipt_folder_url <br><br>" + e
+    Logger.log("no valid receipt forlder url") 
+  }
+return  {msg, templateUrl, folderId}
 }
 
 function testCheckProperties(){
   var bookId = "agtzfmJrcGVyLWhyZHITCxIGTGVkZ2VyGICAoITsoaMJDA";
-  checkProperties(bookId)
+  Logger.log(checkProperties(bookId));
 }
 
 
-function initialize(bookId, transactionIds){
-  var book = BkperApp.openById(bookId)
+
+// populate the Pop up in the book.
+function initialize(bookId, transactionIds, msg, templateUrl, folderId){
+  var book = BkperApp.openById(bookId);
  
   var model = generateModel(book, transactionIds);
-  var object = merge(model);
+  var object = merge(model,templateUrl, folderId);
   
   var receiptUrl = object.receiptUrl;
   var receiptName = object.receiptName;
   
-  
-  return { bookId,   transactionIds, receiptUrl, receiptName}
+  return { bookId, transactionIds, receiptUrl, receiptName}
 }
 
 
-
+// Generation of the model for the receipt
 function generateModel(book, transactionIds) {
   // Book Properties
   //var book = BkperApp.openById(bookId);
@@ -119,7 +141,7 @@ function generateModel(book, transactionIds) {
  return model;
 }
 
-
+// test the generation of th model for the receipt
 function testGenerateModel(){
   var bookId = "agtzfmJrcGVyLWhyZHITCxIGTGVkZ2VyGICAoITsoaMJDA"
   var transactionIds = "1c13381a-ecc4-4db7-a4ab-48cf19c983d2 3a5b72a6-a4bf-48f6-9e87-c18baf1d9dad"
@@ -127,14 +149,11 @@ function testGenerateModel(){
    generateModel(book, transactionIds)
 }
 
-
-function merge(model) {
-  let folderId = model.book.receipt_folder_id;
-  let template = model.book.receipt_template;
+// create the receipt
+function merge(model,templateUrl, folderId) {
   
-
   var params = {   
-      'template': template,
+      'template': templateUrl,
       'model': model,
       'format': 'pdf'
   };
@@ -152,9 +171,12 @@ function merge(model) {
   document.setName(receiptName);
   var file =DriveApp.getFolderById(folderId).createFile(document);
   var receiptUrl = file.getUrl();
+
   return {receiptUrl, receiptName}
 }
 
+
+// test the creation of the receipt
 function testMerge(){
   var bookId = "agtzfmJrcGVyLWhyZHITCxIGTGVkZ2VyGICAoITsoaMJDA"
   var transactionIds = "1c13381a-ecc4-4db7-a4ab-48cf19c983d2 3a5b72a6-a4bf-48f6-9e87-c18baf1d9dad"
@@ -162,3 +184,6 @@ function testMerge(){
   const model =  generateModel(book, transactionIds);
   merge(model);
 }
+
+// extract id from url for folder and docs
+function getIdFromUrl(url) { return url.match(/[-\w]{25,}/); }
