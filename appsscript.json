@@ -10,6 +10,13 @@
         "version": "115",
         "developmentMode": false
       }
+    ],
+    "enabledAdvancedServices": [
+      {
+        "userSymbol": "Drive",
+        "version": "v2",
+        "serviceId": "drive"
+      }
     ]
   },
   "webapp": {
