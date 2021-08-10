@@ -14,10 +14,10 @@
       $('#logo').html("<img class='logo' src='https://static.thenounproject.com/png/2372722-200.png'>");
       $('#header').html("Generating your receipt");  
       showCodeWaiting();
-      console.log(data.bookid,   data.transactionIds, data.msg, data.templateUrl, data.folderId)
+      console.log("needed " + data.bookid,   data.transactionIds, data.msg, data.templateUrl, data.folderId, data.doxeyApiKey)
       google.script.run.withSuccessHandler(loadStuff)
       .withFailureHandler(showError)
-      .initialize(data.bookid,   data.transactionIds, data.msg, data.templateUrl, data.folderId);
+      .initialize(data.bookid,   data.transactionIds, data.msg, data.templateUrl, data.folderId, data.doxeyApiKey);
     } else {
       $('#logo').html("<img class='logo' src='https://static.thenounproject.com/png/2372722-200.png'>");
       $('#header').html("<H3>Instructions</h3>");

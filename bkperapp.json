@@ -27,11 +27,13 @@
       "book": {
         "keys": [
           "receipt_template_url",
-          "receipt_folder_url"  
+          "receipt_folder_url",
+          "doxey_api_key"  
         ],
         "values": [
           "url to your template",
-          "the id of the Google Drive Folder where you will store the receipts"
+          "the id of the Google Drive Folder where you will store the receipts",
+          "Doxey API key to generate receipts without watermark"
         ]
       }
       

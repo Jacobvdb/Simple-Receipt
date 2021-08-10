@@ -22,6 +22,7 @@ The App interacts with the following properties:
 
 - ```receipt_folder_url```: Required - The Url of the Google Drive folder where the app saves your receipts.
 - ```receipt_template_url```: Optional - The Url of the Google Docs Template used to generate your receipts. 
+- ```doxey_api_key```: Optional - Remove the Doxey watermark of your receipts by adding your Doxey API key to your book.
 
 **Note**: although optional it's recomended to use your own Receipt template.
 
