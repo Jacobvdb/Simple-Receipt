@@ -17,6 +17,9 @@
     "menuPopupWidth": 700,
     "menuPopupHeight": 500,
     "clientId":"234303813426-o1m5llumr1bhsgkard501vd12jb7l1u8.apps.googleusercontent.com",
+    "deploymentId": "AKfycbz_Pu7AeDkBT1MzapZ_n3E3bSrR9s8bJdAOgZhKIqtdMQCZKLKgibthZryAJ2rEUZfZ",
+    "webhookUrl": "https://us-central1-bkper-stock-bot.cloudfunctions.net/prod",
+    
     "scopes": ["https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/drive",
       "https://www.googleapis.com/auth/script.external_request"],
