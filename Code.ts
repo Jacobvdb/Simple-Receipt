@@ -15,12 +15,13 @@ var __assign = (this && this.__assign) || function () {
 function doGet(e) {
     var bookId = e.parameter.bookId;
     var transactionIds = e.parameter.transactionIds;
-    var propertiesObj = checkProperties(bookId);
-    Logger.log("alo " + propertiesObj.folderId);
+     var propertiesObj = checkProperties(bookId);
+    
+     Logger.log("api key "+ propertiesObj.doxeyApiKey);
     if (propertiesObj.msg == "") {
         if (transactionIds) {
             var htmlTemplate = HtmlService.createTemplateFromFile('Dialog');
-            htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg: propertiesObj.msg, templateUrl: propertiesObj.templateUrl, folderId: propertiesObj.folderId };
+            htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg: propertiesObj.msg, templateUrl: propertiesObj.templateUrl, folderId: propertiesObj.folderId, doxeyApiKey: propertiesObj.doxeyApiKey };
             var htmlOutput = htmlTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME)
                 .setTitle('Receipt');
         }
@@ -65,6 +66,30 @@ function checkProperties(bookId) {
         Logger.log("no valid template url");
         //return {msg ,receipt_template_url}
     }
+
+    //Doxey Api Key
+    if (!properties.doxey_api_key) {
+        var doxeyApiKey ="";
+    } else {
+        doxeyApiKey = properties.doxey_api_key;
+    
+        // check the license
+        var  params = { 'apiKey': doxeyApiKey };
+        var options = {
+            'contentType': "application/json",
+            'method': 'post',
+            'payload': JSON.stringify(params),
+            'muteHttpExceptions': false
+        };
+        try{
+    
+            UrlFetchApp.fetch('https://api.doxey.io/license', options);
+        } catch (e){
+           Logger.log(e)
+        }
+    }
+    
+
     //Receipt folder 
     // Check content
     if (!properties.receipt_folder_url) {
@@ -82,17 +107,17 @@ function checkProperties(bookId) {
         msg = "Please check the book property receipt_folder_url <br><br>" + e;
         Logger.log("no valid receipt forlder url");
     }
-    return { msg, templateUrl, folderId };
+    return { msg, templateUrl, folderId, doxeyApiKey };
 }
 function testCheckProperties() {
     var bookId = "agtzfmJrcGVyLWhyZHITCxIGTGVkZ2VyGICAoITsoaMJDA";
     Logger.log(checkProperties(bookId));
 }
 // populate the Pop up in the book.
-function initialize(bookId, transactionIds, msg, templateUrl, folderId) {
+function initialize(bookId, transactionIds, msg, templateUrl, folderId, doxeyApiKey) {
     var book = BkperApp.openById(bookId);
     var model = generateModel(book, transactionIds);
-    var object = merge(model, templateUrl, folderId);
+    var object = merge(model, templateUrl, folderId, doxeyApiKey);
     var receiptUrl = object.receiptUrl;
     var receiptName = object.receiptName;
     return { bookId, transactionIds, receiptUrl, receiptName };
@@ -135,12 +160,22 @@ function testGenerateModel() {
     generateModel(book, transactionIds);
 }
 // create the receipt
-function merge(model, templateUrl, folderId) {
-    var params = {
-        'template': templateUrl,
-        'model': model,
-        'format': 'pdf'
-    };
+function merge(model, templateUrl, folderId, doxeyApiKey) {
+
+    if(doxeyApiKey == ""){
+       var params = {
+           'template': templateUrl,
+           'model': model,
+           'format': 'pdf' 
+       };
+    } else{
+        var params = {
+            'template': templateUrl,
+            'model': model,
+            'format': 'pdf',
+            'apiKey': doxeyApiKey
+        };
+    }
     var options = {
         'contentType': "application/json",
         'method': 'post',
