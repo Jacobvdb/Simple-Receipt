@@ -13,7 +13,7 @@
     "scriptId": "1vzb9gRqQgYpjWFsrr8EVp-fPFKEEE425rV8L_0qOG0ZalP6ULhkAWU3p",
     "menuUrl": "https://script.google.com/macros/s/AKfycbz_Pu7AeDkBT1MzapZ_n3E3bSrR9s8bJdAOgZhKIqtdMQCZKLKgibthZryAJ2rEUZfZ/exec?bookId=${book.id}&transactionIds=${transactions.ids}",
     "menuUrlDev": "https://script.google.com/a/macros/bkper.com/s/AKfycbzgp90cQNf_SrqqkuilQ3lSu9NZ6sUcoEqQA7u_r4A/dev?bookId=${book.id}&transactionIds=${transactions.ids}",
-    "menuText": "Simple Receipt",
+    "menuText": "Generate Receipt",
     "menuPopupWidth": 700,
     "menuPopupHeight": 500,
     "clientId":"234303813426-o1m5llumr1bhsgkard501vd12jb7l1u8.apps.googleusercontent.com",
