@@ -22,7 +22,7 @@ function doGet(e) {
     if (propertiesObj.msg == "") {
         if (transactionIds) {
             var htmlTemplate = HtmlService.createTemplateFromFile('Dialog');
-            htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg: propertiesObj.msg, templateUrl: propertiesObj.templateUrl, folderId: propertiesObj.folderId, doxeyApiKey: propertiesObj.doxeyApiKey };
+            htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg: propertiesObj.msg, templateUrl: propertiesObj.templateUrl, doxeyApiKey: propertiesObj.doxeyApiKey };
             var htmlOutput = htmlTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME)
                 .setTitle('Receipt');
         }
@@ -38,7 +38,7 @@ function doGet(e) {
     else {
         // Something wrong with the properties 
         var htmlTemplate = HtmlService.createTemplateFromFile('Dialog');
-        htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg: propertiesObj.msg, templateUrl: propertiesObj.templateUrl, folderId: propertiesObj.folderId };
+        htmlTemplate.dataFromServerTemplate = { bookid: bookId, transactionIds: transactionIds, msg: propertiesObj.msg, templateUrl: propertiesObj.templateUrl  };
         var htmlOutput = htmlTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME)
             .setTitle('Instructions');
     }
@@ -93,20 +93,20 @@ function checkProperties(bookId) {
     
     //Receipt folder 
     // Check content
-    if (!properties.receipt_folder_url) {
-        msg = "Please set book property receipt_folder_url";
-        return { msg, templateUrl };
-    }
+    //if (!properties.receipt_folder_url) {
+    //    msg = "Please set book property receipt_folder_url";
+    //    return { msg, templateUrl };
+    //}
     // check existance/ access
-    var folderId = getIdFromUrl(properties.receipt_folder_url);
+    //var folderId = getIdFromUrl(properties.receipt_folder_url);
 
-    try {
-        DriveApp.getFolderById(folderId);
-    }
-    catch (e) {
-        msg = "Please check the book property receipt_folder_url <br><br>" + e;
-    }
-    return { msg, templateUrl, folderId, doxeyApiKey };
+    //try {
+    //    DriveApp.getFolderById(folderId);
+    //}
+    //catch (e) {
+    //    msg = "Please check the book property receipt_folder_url <br><br>" + e;
+    //}
+    return { msg, templateUrl,  doxeyApiKey };
 }
 
 
@@ -115,17 +115,19 @@ function checkProperties(bookId) {
 
 
 // Initialize the Pop up in the book.
-function initialize(bookId, transactionIds, msg, templateUrl, folderId, doxeyApiKey) {
+function initialize(bookId, transactionIds, msg, templateUrl,  doxeyApiKey) {
     var book = BkperApp.openById(bookId);
 
     if (doxeyApiKey =="ok"){
        doxeyApiKey = book.getProperty("doxey_api_key")
     } 
     var model = generateModel(book, transactionIds);
-    var object = merge(model, templateUrl, folderId, doxeyApiKey);
-    var receiptUrl = object.receiptUrl;
-    var receiptName = object.receiptName;
-    return { bookId, transactionIds, receiptUrl, receiptName };
+    //var object = merge(model, templateUrl, folderId, doxeyApiKey);
+    //var receiptUrl = object.receiptUrl;
+    //var receiptName = object.receiptName;
+    //return { bookId, transactionIds, receiptUrl, receiptName };
+    var document = merge(model, templateUrl,  doxeyApiKey);
+    return {document}
 }
 
 
@@ -163,7 +165,7 @@ function generateModel(book, transactionIds) {
 
 
 // Create the receipt pdf
-function merge(model, templateUrl, folderId, doxeyApiKey) {
+function merge(model, templateUrl,  doxeyApiKey) {
 
     if(doxeyApiKey == ""){
        var params = {
@@ -186,13 +188,11 @@ function merge(model, templateUrl, folderId, doxeyApiKey) {
         'muteHttpExceptions': false
     };
     var response = UrlFetchApp.fetch('https://api.doxey.io/merge', options);
-    var document = response.getBlob();
-    var date = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'dd-MM-yyyy');
-    var receiptName = "Receipt " + date + ".pdf";
-    document.setName(receiptName);
-    var file = DriveApp.getFolderById(folderId).createFile(document);
-    var receiptUrl = file.getUrl();
-    return { receiptUrl, receiptName };
+    var blob = response.getBlob();
+    var bytes= blob.getBytes();
+    var encoded = Utilities.base64Encode(bytes);
+    
+    return encoded
 }
 
 // Utilities
@@ -217,7 +217,10 @@ function testGenerateModel() {
 function testMerge() {
     var bookId = "agtzfmJrcGVyLWhyZHITCxIGTGVkZ2VyGICAoITsoaMJDA";
     var transactionIds = "1c13381a-ecc4-4db7-a4ab-48cf19c983d2 3a5b72a6-a4bf-48f6-9e87-c18baf1d9dad";
+    var folderId = "13d36TqAJ8sLdevN95FhK7jyXblBv_Grz";
+    var doxeyApiKey ="";
+    var templateUrl ="https://docs.google.com/document/d/1MMENpgkJu24RqHDtVvn9jEJRcEgBo_KtND123VFNTnk/edit";
     var book = BkperApp.openById(bookId);
     const model = generateModel(book, transactionIds);
-    merge(model);
+    merge(model, templateUrl, folderId, doxeyApiKey);
 }

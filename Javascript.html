@@ -9,15 +9,13 @@
   
 
   function initialize(){
-
     if (data.msg ==""){
       $('#logo').html("<img class='logo' src='https://static.thenounproject.com/png/2372722-200.png'>");
       $('#header').html("Generating your receipt");  
       showCodeWaiting();
-      console.log("needed " + data.bookid,   data.transactionIds, data.msg, data.templateUrl, data.folderId, data.doxeyApiKey)
       google.script.run.withSuccessHandler(loadStuff)
       .withFailureHandler(showError)
-      .initialize(data.bookid,   data.transactionIds, data.msg, data.templateUrl, data.folderId, data.doxeyApiKey);
+      .initialize(data.bookid,  data.transactionIds, data.msg, data.templateUrl,  data.doxeyApiKey);
     } else {
       $('#logo').html("<img class='logo' src='https://static.thenounproject.com/png/2372722-200.png'>");
       $('#header').html("<H3>Instructions</h3>");
@@ -29,38 +27,29 @@
     }
   }
 
-  
-
-function loadStuff(obj){
+function loadStuff(encoded){
   hideCodeWaiting() ;
-  var receiptUrl = obj.receiptUrl;
-  var receiptName = obj.receiptName;
-  $('#logo').html("<img class='logo' src='https://static.thenounproject.com/png/2372722-200.png'>");
-  $('#header').html("<H3>Your receipt is ready</h3>");   
-  $('#content').empty();
-  var html = "<div > </div>"
-      html = html +"<div > <a href='"+receiptUrl+"' target='_blank'>"+ receiptName+"</a> </div><br><br>"   
-      html = html +"<button id='cancelButton' onclick='closeDialog()'>Close</button>"
-  $('#content').html(html);   
+  let pdfWindow = window.open("")
+  pdfWindow.document.write("<iframe width='100%' height='100%' src='data:application/pdf;base64, " + encodeURI(encoded.document) + "'></iframe>")
+  closeDialog();
 }
 
-  function showError(msg) {
-     var div = $('<div id="error">' +msg + '</div>');
-     
-    setTimeout(function() {
-      $('#error').remove();
-    }, 7000); // auto-dismiss message after 5s.
-    $('#content').after(div);
-  }
+function showError(msg) {
+   var div = $('<div id="error">' +msg + '</div>');
+   
+  setTimeout(function() {
+    $('#error').remove();
+  }, 7000); // auto-dismiss message after 5s.
+  $('#content').after(div);
+}
 
-  function showCodeWaiting() {
-    document.getElementById('waiting').innerHTML = `<img src='https://storage.googleapis.com/bkper-public/addons/loading_3dots.gif'/>`
-  }
+function showCodeWaiting() {
+  document.getElementById('waiting').innerHTML = `<img src='https://storage.googleapis.com/bkper-public/addons/loading_3dots.gif'/>`
+}
 
-  function hideCodeWaiting() {
-    document.getElementById('waiting').innerHTML = ``
-  }
-
-  function closeDialog() { window.top.close(); }
+function hideCodeWaiting() {
+  document.getElementById('waiting').innerHTML = ``
+}
+function closeDialog() { window.top.close(); }
 
 </script>
