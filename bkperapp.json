@@ -21,7 +21,8 @@
     "webhookUrl": "https://us-central1-bkper-stock-bot.cloudfunctions.net/prod",
     
     "scopes": ["https://www.googleapis.com/auth/userinfo.email",
-      "https://www.googleapis.com/auth/script.external_request"],
+      "https://www.googleapis.com/auth/script.external_request",
+      "https://www.googleapis.com/auth/drive.file"],
     "propertiesSchema": {
       "book": {
         "keys": [
