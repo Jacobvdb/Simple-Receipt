@@ -3,7 +3,7 @@
     "name": "Simple Receipt",
     "description": "Select some transaction(s) from your book to generate a simple pdf receipt",
     "logoUrl": "https://static.thenounproject.com/png/2372722-200.png",
-    "website": "https://bkper.com/apps/simple-receipt-app",
+    "website": "https://bkper.com/apps/bkper-simple-receipt",
     "ownerName": "Bkper",
     "ownerLogoUrl": "https://avatars.githubusercontent.com/u/11943086?v=4",
     "ownerWebsite": "https://github.com/bkper",
