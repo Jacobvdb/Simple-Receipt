@@ -16,7 +16,8 @@ Generates a simple pdf receipt based on selected transactions on your Bkper book
 
 ### Receipt Template
 The Simple Receipt App uses this Google Doc as a default template:  [Simple Receipt Template](https://docs.google.com/document/d/1MMENpgkJu24RqHDtVvn9jEJRcEgBo_KtND123VFNTnk/edit?usp=sharing). Make your own copy of this template and customize it with your logo and address.
-You can use the following generic expressions on the template.
+You can use the following generic expressions on the template.   
+
 -```${receipt.date}``` : The date and time when the receipt is generated.   
 -```${receipt.total}``` : The sum of the line items on the receipt. 
 
@@ -42,7 +43,7 @@ The App interacts with the following properties on your book:
 
 ### Third Party Service Doxey
 Simple Receipt App uses [doxey.io](https://www.doxey.io/) to merge the transaction data from your book into the Google Docs Tempate in order to generate the pdf receipt.
-You can use the free version that comes with a watermark or either remove the watermark by using the paid version adding your Doxey API Key to the book properties. 
+You can use the free version that comes with a watermark or either remove the watermark by using the paid version adding your Doxey API Key to the book properties.    
 Learn more about the use of Template expression the [Doxey Help Center](https://help.doxey.io/en/templates/overview.html)
 
 
