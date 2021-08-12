@@ -16,8 +16,8 @@ var __assign = (this && this.__assign) || function () {
 function doGet(e) {
     var bookId = e.parameter.bookId;
     var transactionIds = e.parameter.transactionIds;
-     var propertiesObj = checkProperties(bookId);
-
+    
+    var propertiesObj = checkProperties(bookId);
      
     if (propertiesObj.msg == "") {
         if (transactionIds) {
@@ -91,27 +91,9 @@ function checkProperties(bookId) {
         }
     }
     
-    //Receipt folder 
-    // Check content
-    //if (!properties.receipt_folder_url) {
-    //    msg = "Please set book property receipt_folder_url";
-    //    return { msg, templateUrl };
-    //}
-    // check existance/ access
-    //var folderId = getIdFromUrl(properties.receipt_folder_url);
-
-    //try {
-    //    DriveApp.getFolderById(folderId);
-    //}
-    //catch (e) {
-    //    msg = "Please check the book property receipt_folder_url <br><br>" + e;
-    //}
+    
     return { msg, templateUrl,  doxeyApiKey };
 }
-
-
-
-
 
 
 // Initialize the Pop up in the book.
@@ -121,15 +103,13 @@ function initialize(bookId, transactionIds, msg, templateUrl,  doxeyApiKey) {
     if (doxeyApiKey =="ok"){
        doxeyApiKey = book.getProperty("doxey_api_key")
     } 
+    // create the model 
     var model = generateModel(book, transactionIds);
-    //var object = merge(model, templateUrl, folderId, doxeyApiKey);
-    //var receiptUrl = object.receiptUrl;
-    //var receiptName = object.receiptName;
-    //return { bookId, transactionIds, receiptUrl, receiptName };
+    
+    // get the document form doxey
     var document = merge(model, templateUrl,  doxeyApiKey);
     return {document}
 }
-
 
 
 // Generation of the model for the receipt
@@ -178,7 +158,7 @@ function merge(model, templateUrl,  doxeyApiKey) {
             'template': templateUrl,
             'model': model,
             'format': 'pdf',
-            'apiKey': doxeyApiKey
+            'apiKey': doxeyApiKey  // no watermark
         };
     }
     var options = {
