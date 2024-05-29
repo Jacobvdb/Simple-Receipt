@@ -1,3 +1,6 @@
 node_modules
 .bkper-credentials.json
 .DS_store
+.env
+yarn-error.log
+.history
