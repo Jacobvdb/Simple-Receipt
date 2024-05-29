@@ -7,8 +7,7 @@
       {
         "userSymbol": "BkperApp",
         "libraryId": "1hMJszJGSUVZDB3vmsWrUZfRhY1UWbhS0SQ6Lzl06gm1zhBF3ioTM7mpJ",
-        "version": "115",
-        "developmentMode": false
+        "version": "155"
       }
     ]
   },
@@ -19,6 +18,8 @@
   "oauthScopes": [
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/drive.file",
-    "https://www.googleapis.com/auth/script.external_request"
+    "https://www.googleapis.com/auth/script.external_request",
+    "https://www.googleapis.com/auth/drive.readonly", 
+    "https://www.googleapis.com/auth/drive"
   ]
 }

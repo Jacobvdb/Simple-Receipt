@@ -1,2 +1,3 @@
 node_modules
 .bkper-credentials.json
+.DS_store
