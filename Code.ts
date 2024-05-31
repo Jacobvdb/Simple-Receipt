@@ -123,12 +123,12 @@ function generateModel(book, transactionIds) {
             date: transaction.getInformedDateText(),
             description: transaction.getDescription(),
             account: transaction.getCreditAccount().getName(),
-            amount: transaction.getAmount()
+            amount: transaction.getAmount().toFixed(2)
         });
         total += Number(transaction.getAmount());
     }
     //Receipt
-    model.receipt = __assign({ total: total, date: Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'dd/MM/yyyy HH:mm:ss') });
+    model.receipt = __assign({ total: total.toFixed(2), date: Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'dd/MM/yyyy HH:mm:ss') });
     return model;
 }
 // Create the receipt pdf
@@ -159,10 +159,7 @@ function merge(model, templateUrl, doxeyApiKey) {
         'muteHttpExceptions': false
     };
     var response = UrlFetchApp.fetch('https://api.doxey.io/merge', options);
-    //var document = response.getBlob();
-    //document.setName("Bkper Doxey Gs sample.pdf");
-    //DriveApp.getFolderById("1543DzFsTzXco2z34bpdKkdGbPu42tkjl").createFile(document)
-    //
+   
     var blob = response.getBlob();
     var bytes = blob.getBytes();
     var encoded = Utilities.base64Encode(bytes);
