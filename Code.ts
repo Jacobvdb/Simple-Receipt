@@ -41,10 +41,12 @@ function doGet(e) {
     }
     return htmlOutput;
 }
+
 function checkProperties(bookId) {
     var book = BkperApp.openById(bookId);
     var properties = book.getProperties();
     var msg = "";
+
     //Receipt template
     // Check content of the property
     if (!properties.receipt_template_url) {
@@ -53,18 +55,7 @@ function checkProperties(bookId) {
     else {
         var templateUrl = properties.receipt_template_url;
     }
-    //Check for access to receipt_template
-    //DocumentApp.openByUrl(templateUrl)
-   // const doc = DocumentApp.openByUrl(templateUrl);
-   // const id = doc.getId();
-
-    var templateId = getIdFromUrl(templateUrl);
-    try {
-        DriveApp.getFileById(templateId);
-    }
-    catch (e) {
-        msg = "Please check the book property receipt_template_url <br><br>" + e;
-    }
+    
     //Doxey Api Key
     if (!properties.doxey_api_key) {
         // The document will use the watermark
@@ -90,6 +81,7 @@ function checkProperties(bookId) {
     }
     return { msg, templateUrl, doxeyApiKey };
 }
+
 // Initialize the Pop up in the book.
 function initialize(bookId, transactionIds, msg, templateUrl, doxeyApiKey) {
     var book = BkperApp.openById(bookId);
@@ -102,16 +94,14 @@ function initialize(bookId, transactionIds, msg, templateUrl, doxeyApiKey) {
     var document = merge(model, templateUrl, doxeyApiKey);
     return { document };
 }
+
 // Generation of the model for the receipt
 function generateModel(book, transactionIds) {
-    // Book Properties
-    //var book = BkperApp.openById(bookId);
+    
     var model = {
         book: __assign(__assign({}, book.getProperties()), { name: book.getName() })
     };
-    // Account properties
-    //var account = book.getAccount(customerName);
-    //model.customer = __assign(__assign({}, account.getProperties()), { name: account.getName(), balance: account.getBalance() });
+    
     // transactions
     const transactionIdsArray = transactionIds.split(" ");
     var total = 0 * 1;
@@ -131,6 +121,7 @@ function generateModel(book, transactionIds) {
     model.receipt = __assign({ total: total.toFixed(2), date: Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'dd/MM/yyyy HH:mm:ss') });
     return model;
 }
+
 // Create the receipt pdf
 function merge(model, templateUrl, doxeyApiKey) {
   Logger.log(templateUrl)
@@ -165,9 +156,9 @@ function merge(model, templateUrl, doxeyApiKey) {
     var encoded = Utilities.base64Encode(bytes);
     return encoded;
 }
-// Utilities
-// extract id from url for folder and docs
-function getIdFromUrl(url) { return url.match(/[-\w]{25,}/); }
+
+
+
 // Tests
 // test the property check 
 function testCheckProperties() {

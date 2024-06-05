@@ -10,7 +10,7 @@
     "repoUrl": "https://github.com/bkper/bkper-simple-receipt",
     "repoPrivate": false,
     "deprecated": false,    
-    "menuUrl": "https://script.google.com/macros/s/AKfycbxBc7vRQ90zdnsXNseKutrirvQQNUCq7lkcyxFeoxFYBTMePlJ6ScBofWCq2J1_J0yV/exec?bookId=${book.id}&transactionIds=${transactions.ids}",
+    "menuUrl": "https://script.google.com/macros/s/AKfycbyHN6j6pzTQ8qNXg80CQ59_bKYVBmFsSmUtyJEkhZRHqcoVRiJhrnU2B-3TzJpal6sC/exec?bookId=${book.id}&transactionIds=${transactions.ids}",
     "menuUrlDev": "https://script.google.com/a/macros/bkper.com/s/AKfycbzgp90cQNf_SrqqkuilQ3lSu9NZ6sUcoEqQA7u_r4A/dev?bookId=${book.id}&transactionIds=${transactions.ids}",
     "menuText": "Generate Receipt",
     "menuPopupWidth": 700,
