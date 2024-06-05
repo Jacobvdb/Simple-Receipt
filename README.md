@@ -1,4 +1,4 @@
-Simple Receipt App for Bkper 
+## Simple Receipt App for Bkper 
 
 Generates a simple pdf receipt based on selected transactions on your Bkper book. 
 
