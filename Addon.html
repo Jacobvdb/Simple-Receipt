@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Generate Receipt</title>
+    <base target="_top">
+    
+  </head>
+  <body>
+    <header class="header">
+      <img src="https://static.thenounproject.com/png/2372722-200.png" alt="Receipt Icon" class="receipt__icon invert" style="width: 24px; height: 24px; margin-right: 8px;margin-left: 20px;"><h1 class="header__title">Generate Receipt</h1> <sl-icon-button  name="x" label="Settings" style="font-size: 1.3rem;" onclick="closeDialog()"></sl-icon-button>
+    </header>
+    <sl-progress-bar id="progresssBar" style="--height: 4px;" indeterminate></sl-progress-bar>
+
+    <div class="main"> 
+      <div class="book__card">
+       <sl-icon  name="book" label="book" class="book__icon"></sl-icon><div id="book-name" class="book__name"> </div>
+      </div>
+
+
+      <div id="pdf-container"></div>
+
+      <div class="message__card"></div>
+      <sl-alert close closable id="alert">
+        <sl-icon slot="icon" name="info-circle"></sl-icon>
+        <div id="alert_msg"> </div>
+      </sl-alert>
+      </div>
+ 
+    </div>  
+
+  
+    <footer class="footer" >
+      &nbsp;
+      </footer>
+    <script>
+      var data = <?!= JSON.stringify(dataFromServerTemplate) ?>; 
+    </script>
+  
+  </body>  
+</html>
+<?!= HtmlService.createHtmlOutputFromFile('Javascript').getContent(); ?>
+<?!= HtmlService.createHtmlOutputFromFile('Style').getContent(); ?>

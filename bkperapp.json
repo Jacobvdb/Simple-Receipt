@@ -10,11 +10,11 @@
     "repoUrl": "https://github.com/bkper/bkper-simple-receipt",
     "repoPrivate": false,
     "deprecated": false,    
-    "menuUrl": "https://script.google.com/macros/s/AKfycbyHN6j6pzTQ8qNXg80CQ59_bKYVBmFsSmUtyJEkhZRHqcoVRiJhrnU2B-3TzJpal6sC/exec?bookId=${book.id}&transactionIds=${transactions.ids}",
+    "menuUrl": "https://script.google.com/macros/s/AKfycbxT8f4H9PZu5HMJYkNNUkvnH91TlNGhcqPG8_9T05SVd0Boh2PyNpsrweGKgmqgOIZ8/exec?bookId=${book.id}&transactionIds=${transactions.ids}",
     "menuUrlDev": "https://script.google.com/a/macros/bkper.com/s/AKfycbzgp90cQNf_SrqqkuilQ3lSu9NZ6sUcoEqQA7u_r4A/dev?bookId=${book.id}&transactionIds=${transactions.ids}",
     "menuText": "Generate Receipt",
-    "menuPopupWidth": 700,
-    "menuPopupHeight": 500,
+    "menuPopupWidth": "380",
+    "menuPopupHeight": "1100",
     "propertiesSchema": {
       "book": {
         "keys": [

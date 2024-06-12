@@ -1,55 +1,65 @@
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.0/cdn/shoelace-autoloader.js"></script>
 
 <script>
- $(function() 
-   {
-       initialize();     
-   }
-  );
-  
+  document.addEventListener("DOMContentLoaded", function() {
+    initialize();
+  });
+
 
   function initialize(){
-    if (data.msg ==""){
-      $('#logo').html("<img class='logo' src='https://static.thenounproject.com/png/2372722-200.png'>");
-      $('#header').html("Generating your receipt");  
-      showCodeWaiting();
-      google.script.run.withSuccessHandler(loadStuff)
-      .withFailureHandler(showError)
-      .initialize(data.bookid,  data.transactionIds, data.msg, data.templateUrl,  data.doxeyApiKey);
+    
+    showAlert( data.msg ); 
+    if(data.status === 200){
+      document.getElementById("book-name").innerHTML= data.bookName;
+       google.script.run.withSuccessHandler(loadReceipt)
+       .withFailureHandler(showAlert)
+       .getReceipt();
+       
     } else {
-      $('#logo').html("<img class='logo' src='https://static.thenounproject.com/png/2372722-200.png'>");
-      $('#header').html("<H3>Instructions</h3>");
-      $('#content').empty();
-      var html = "<div ><br><br> </div>"
-      html = html +"<div><a href='https://bkper.com/apps/bkper-simple-receipt' target='_blank'>" + data.msg + "</a> </div><br><br>"   
-      html = html +"<button id='cancelButton' onclick='closeDialog()'>Close</button>"
-      $('#content').html(html);
+      showProgressBar(false) 
+      return 
     }
-  }
 
-function loadStuff(encoded){
-  hideCodeWaiting() ;
+
+  };
+
+// Open the receipt.pdf
+function loadReceipt(encoded){
+  showProgressBar(false) 
+  
   let pdfWindow = window.open("")
   pdfWindow.document.write("<iframe width='100%' height='100%' src='data:application/pdf;base64, " + encodeURI(encoded.document) + "'></iframe>")
-  closeDialog();
+  
+   closeDialog();
 }
 
-function showError(msg) {
-   var div = $('<div id="error">' +msg + '</div>');
-   
+
+
+
+
+// Progressbar handling 
+function showProgressBar(handle) {
+  const pb = document.getElementById('progresssBar');
+  pb.indeterminate = handle;
+}
+
+
+function showAlert(msg){
+  const alert = document.getElementById("alert");
+  if(msg){const message = document.getElementById("alert_msg").innerHTML= msg;
+  
+  alert.open = true;
+  
   setTimeout(function() {
-    $('#error').remove();
-  }, 7000); // auto-dismiss message after 5s.
-  $('#content').after(div);
+      if(message){message.innerHTML=""};
+      alert.open =false;
+  }, 11000); 
+  }
 }
 
-function showCodeWaiting() {
-  document.getElementById('waiting').innerHTML = `<img src='https://storage.googleapis.com/bkper-public/addons/loading_3dots.gif'/>`
-}
-
-function hideCodeWaiting() {
-  document.getElementById('waiting').innerHTML = ``
-}
 function closeDialog() { window.top.close(); }
+//function closeDialog() { google.script.host.close }
+
+
 
 </script>
