@@ -5,12 +5,17 @@ function doGet(e) {
         // Handle the case when the bookId or transactionIds parameter is missing
         var msg = "Missing bookId or transactionIds parameter";
         var status = 400; 
-        //return ContentService.createTextOutput("Missing bookId or transactionIds parameter");
+        return ContentService.createTextOutput("Missing bookId or transactionIds parameter");
     } else {
         setUserProperty("bookId", e.parameter.bookId);
         setUserProperty("transactionIds", e.parameter.transactionIds);
 
         var book = BkperApp.openById(e.parameter.bookId);
+        
+        // Increment the receipt number
+        incrementReceiptNumber(book);
+ 
+       
         var bookName = book.getName()
         setUserProperty("bookName", book.getName());
         setUserProperty("bookDatePattern", book.getDatePattern());
@@ -24,7 +29,7 @@ function doGet(e) {
     var htmlOutput = htmlTemplate.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME)
     .setTitle('Generate Receipt');
 
-return htmlOutput;
+ return htmlOutput;
 }
 
 // Initialize the Pop up in the book.
@@ -50,17 +55,17 @@ function getReceipt() {
     // get the document form doxey
     var document = merge(model, templateUrl, doxeyApiKey);
     
-
     // Increment the receipt number
     incrementReceiptNumber(book);
+ 
     // cleanup properties
     setUserProperty("bookId", "")
     setUserProperty("transactionIds", "")
     book.update();
 
-
-   return { document };
+    return { document };
 }
+
 
 function generateModel(book, transactionIds) {
     const transactionIdsArray = transactionIds.split(" ");
@@ -121,8 +126,9 @@ function generateModel(book, transactionIds) {
 
     // Format the receipt total to two decimal places
     model.receipt.total = model.receipt.total.toFixed(2);
-    Logger.log(model);
-    
+
+    Logger.log(model)
+
     return model;
 }
 
@@ -157,7 +163,6 @@ function merge(model, templateUrl, doxeyApiKey) {
     var encoded = Utilities.base64Encode(bytes);
     return encoded;
 }
-
 
 
 function setUserProperty(propertyKey, propertyValue) {
@@ -197,27 +202,3 @@ function incrementReceiptNumber(book) {
     book.setProperty("receipt_number", (currentNumber + 1).toString());
     book.update();
 }
-
-
-function closeThis(){
-    Logger.log("closing")
-    return
-}
-
-// test the generation of the model for the receipt
-function testGenerateModel() {
-    var bookId = "agtzfmJrcGVyLWhyZHITCxIGTGVkZ2VyGICAoITsoaMJDA";
-    var transactionIds = "84498fd2-bc90-4743-97ce-ef04a6a0b133 8a3a48e4-b729-4a0c-a62a-75dbfce52980";
-    var book = BkperApp.openById(bookId);
-    generateModel(book, transactionIds);
-}
-// test the creation of the receipt
-function testMerge() {
-    var bookId = "agtzfmJrcGVyLWhyZHITCxIGTGVkZ2VyGICAoITsoaMJDA";
-    var transactionIds = "84498fd2-bc90-4743-97ce-ef04a6a0b133 8a3a48e4-b729-4a0c-a62a-75dbfce52980";
-    var folderId = "13d36TqAJ8sLdevN95FhK7jyXblBv_Grz";
-    var doxeyApiKey = "";
-    var templateUrl = "https://docs.google.com/document/d/1MMENpgkJu24RqHDtVvn9jEJRcEgBo_KtND123VFNTnk/edit";
-    var book = BkperApp.openById(bookId);
-    const model = generateModel(book, transactionIds);
-    merge(model, templateUrl, folderId, doxeyApiKey);
