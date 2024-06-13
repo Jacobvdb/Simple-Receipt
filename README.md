@@ -18,16 +18,28 @@ Generates a simple pdf receipt based on selected transactions on your Bkper book
 The Simple Receipt App uses this Google Doc as a default template:  [Simple Receipt Template](https://docs.google.com/document/d/1MMENpgkJu24RqHDtVvn9jEJRcEgBo_KtND123VFNTnk/edit?usp=sharing). Make your own copy of this template and customize it with your logo and address.
 You can use the following generic expressions on the template.   
 
+Receipt expresions
+
 -```${receipt.date}``` : The date and time when the receipt is generated.   
 -```${receipt.total}``` : The sum of the line items on the receipt. 
 
-You can use the following expresions for line items on your receipt.
-- ```$[transactions.date]``` : The post date of the line item.
-- ```$[transactions.description]``` : The description of the line item.
-- ```$[transactions.account]``` : The credit account of the line item.
-- ```$[transactions.amount]``` : The line item amount. 
+Book expresssions 
+-```${book.property}``` : A book property.  
 
-Repeat these line item expresions as in the default template.
+Transaction expresions
+-```$[transactions.date]``` : The post date of the line item.
+-```$[transactions.description]``` : The description of the line item.
+-```$[transactions.fromAccount]``` : The credit account of the line item.
+-```$[transactions.toAccount]``` : The debit account of the line item.
+-```$[transactions.amount]``` : The line item amount. 
+-```$[transactions.property]``` : A line item property. 
+
+**Note**: $[] refer to an iterator (more than one) Place these in a table as in the default template.   
+If you want to address just one item from the iterator use ```${transactions[0].description}```
+
+Account expressions
+-```${fomAccount.property}``` : A credit account property. 
+-```${toAccount.property}``` : A debit account property.
 
 
 ### Book Properties
