@@ -61,12 +61,16 @@ The App interacts with these properties on your book:
 - ```receipt_template_url```: Optional - The Url of your personalized Template used to generate receipts. 
 - ```doxey_api_key```: Optional - Remove the Doxey watermark of your receipts by adding your Doxey API key to your book.
 
+The App creates and interacts with the book property:   
+- ```receipt_number```: the property value represents a counter that increments with each generated receipt. The expression ```${book.receipt_number}``` on the template is substituted with this number.
 
 
+Video tutorial: https://youtu.be/bkkk_xqJtdo 
+This is a Beta please request access to use it.
 
 
 ### Third Party Service Doxey
-Simple Receipt App uses [doxey.io](https://www.doxey.io/) to merge the transaction data from your book into the Google Docs Tempate in order to generate the pdf receipt.
+Simple Receipt App uses [doxey.io](https://www.doxey.io/) to merge the transaction data from your book into the Tempate in order to generate the pdf receipt.
 You can use the free version that comes with a watermark or either remove the watermark by using the paid version adding your Doxey API Key to the book properties.    
 Learn more about the use of Template expression the [Doxey Help Center](https://help.doxey.io/en/templates/overview.html)
 
